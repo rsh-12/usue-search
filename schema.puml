@@ -1,0 +1,55 @@
+@startuml
+'https://plantuml.com/component-diagram
+title "Full-text search"
+
+database "Database" {
+  folder "Schema" {
+    [Table 1]
+    [Table N]
+  }
+
+  frame "WAL" {
+   [WAL] <-- [Table 1] : Writes
+   [WAL] <-- [Table N] : Writes
+  }
+}
+
+folder "CDC" {
+    node "Debezium source" #b8b7eb {
+       [WAL] <-right- [Debezium source] : Reads
+    }
+
+    node "Zookeeper" {
+        [Debezium source] --> [Kafka] : Writes
+    }
+
+    node "Debezium sink" #b8b7eb {
+        [Kafka] --> [Debezium sink] : Reads
+    }
+}
+
+node "Elastic" #b7ebc0 {
+    [Elastic] <-- [Debezium sink] : Syncs indices
+}
+
+node "Kibana" #b7ebc0 {
+    [Elastic] --> [Kibana] : Visualize
+}
+
+node "Backend" #b7ebc0 {
+  [Backend] --> [Elastic] : Perform search operations
+}
+
+node "Frontend" #b7e6eb {
+  [Backend] <- [Frontend] : Visualize search results
+}
+
+node "Kafka UI" #b7e6eb {
+    [Kafka UI] ---> [Kafka]
+}
+
+node "Information System" #Yellow {
+    [Information System] --> [Database]
+}
+
+@enduml
