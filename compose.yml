@@ -5,7 +5,7 @@ services:
     container_name: zookeeper
     restart: unless-stopped
     ports:
-      - "2181:2181"
+      - "127.0.0.1:2181:2181"
     volumes:
       - zookeeper_data:/bitnami
     environment:
@@ -16,7 +16,7 @@ services:
     container_name: kafka
     restart: unless-stopped
     ports:
-      - "9092:9092"
+      - "127.0.0.1:9092:9092"
     volumes:
       - kafka_data:/bitnami
     environment:
@@ -40,7 +40,7 @@ services:
     container_name: kafka-schema-registry
     restart: unless-stopped
     ports:
-      - "8081:8081"
+      - "127.0.0.1:8081:8081"
     environment:
       SCHEMA_REGISTRY_HOST_NAME: kafka-schema-registry
       SCHEMA_REGISTRY_LOG4J_ROOT_LOGLEVEL: WARN
@@ -53,7 +53,7 @@ services:
     container_name: kafka-connect
     restart: unless-stopped
     ports:
-      - "8083:8083"
+      - "127.0.0.1:8083:8083"
     environment:
       CONNECT_BOOTSTRAP_SERVERS: kafka:29092
       CONNECT_REST_PORT: 8083
@@ -83,7 +83,7 @@ services:
     container_name: kafka-ui
     image: provectuslabs/kafka-ui:latest
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     environment:
       DYNAMIC_CONFIG_ENABLED: 'true'
     volumes:
@@ -102,14 +102,14 @@ services:
       POSTGRES_PASSWORD: pwd
       POSTGRES_DB: demo
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
 
   elasticsearch:
     image: elasticsearch:8.15.2
     container_name: elastic
     restart: on-failure
     ports:
-      - "9200:9200"
+      - "127.0.0.1:9200:9200"
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
     environment:
@@ -127,7 +127,7 @@ services:
     container_name: kibana
     restart: on-failure
     ports:
-      - "5601:5601"
+      - "127.0.0.1:5601:5601"
     environment:
       ELASTICSEARCH_URL: http://elasticsearch:9200
       ELASTICSEARCH_HTTPS: http://elasticsearch:9200
